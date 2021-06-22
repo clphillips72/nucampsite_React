@@ -38,12 +38,16 @@ class CampsiteInfo extends Component{
     render(){
         if(this.props.campsite)
         {
+            console.log("campsite isn't empty");
             return (
-            <div className="row">
-                {this.renderCampsite(this.props.campsite)}
-                {this.renderComments(this.props.campsite.comments)}
+                <div className="container">
+                    <div className="row">
+                        {this.renderCampsite(this.props.campsite)}
+                        {this.renderComments(this.props.campsite.comments)}
+                </div>
             </div>);            
         }
+        console.log("campsite is empty");
         return <div />;
     }     
 }
