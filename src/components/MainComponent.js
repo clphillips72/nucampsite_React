@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand } from 'reactstrap';
 import Directory from './DirectoryComponent';
 import { CAMPSITES } from '../shared/campsites';
 import CampsiteInfo from './CampsiteInfoComponent';
+import Header from './HeaderComponent';
+import Footer from './FooterComponent';
 
 class Main extends Component {
     constructor(props){
@@ -20,11 +21,7 @@ class Main extends Component {
     render() {
         return (
             <div>
-                <Navbar dark color="primary">
-                    <div className="container">
-                        <NavbarBrand href="/">NuCamp</NavbarBrand>
-                    </div>
-                </Navbar>
+                <Header />              
                 <Directory campsites={ this.state.campsites } onClick={campsiteId => this.onCampsiteSelect(campsiteId)}/>    
                     {/* Rendering, or calling, the Directory component
                         and passing an onClick event handler as a prop */}
@@ -32,6 +29,7 @@ class Main extends Component {
                     {/* Rendering, or calling, the CampsiteInfo component
                         First, find the specific campsite.Id in the campsites array 
                            and pass that one Object (not an array) to the CampsiteInfo component */}
+                <Footer />
             </div>
         );
     }
