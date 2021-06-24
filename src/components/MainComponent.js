@@ -4,31 +4,28 @@ import { CAMPSITES } from '../shared/campsites';
 import CampsiteInfo from './CampsiteInfoComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
+import Home from './HomeComponent';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 class Main extends Component {
     constructor(props){
         super(props);
-        this.state = {  campsites: CAMPSITES,
-                        selectedCampsiteId: null
-         };
-    }
-
-    onCampsiteSelect(campsiteId) {
-        console.log(`Entering onCampsiteSelect for id: ${campsiteId}`);
-        this.setState({selectedCampsiteId: campsiteId});
+        this.state = { campsites: CAMPSITES };
     }
 
     render() {
+        const HomePage = () => {
+            return (
+                <Home />
+            );
+        }
         return (
             <div>
-                <Header />              
-                <Directory campsites={ this.state.campsites } onClick={campsiteId => this.onCampsiteSelect(campsiteId)}/>    
-                    {/* Rendering, or calling, the Directory component
-                        and passing an onClick event handler as a prop */}
-                <CampsiteInfo campsite={this.state.campsites.filter(campsite => campsite.id === this.state.selectedCampsiteId)[0]} />
-                    {/* Rendering, or calling, the CampsiteInfo component
-                        First, find the specific campsite.Id in the campsites array 
-                           and pass that one Object (not an array) to the CampsiteInfo component */}
+                <Header />   
+                <Switch> 
+                    <Route path='/home' component={HomePage} />
+                    <Route exact path='/directory' render={() => <Directory campsites={ this.state.campsites } />} />
+                </Switch>
                 <Footer />
             </div>
         );
