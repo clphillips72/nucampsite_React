@@ -10,6 +10,7 @@ import Footer from './FooterComponent';
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import About from './AboutComponent';
 
 
 class Main extends Component {
@@ -47,10 +48,23 @@ class Main extends Component {
             <div>
                 <Header />   
                 <Switch> 
-                    {/* use component={} when component doesn't require state data, otherwise use render={} */}
+                    {/* use component={} when component doesn't require state data, otherwise use render={} 
+                        when you need to pass props/"state data" to the component being routed to.*/}
                     <Route path='/home' component={HomePage} />
-                    <Route exact path='/directory' render={() => <Directory campsites={ this.state.campsites } />} />
+                    {/* 
+
+                        Another way to code the above call to {HomePage}...
+                    
+                        <Route exact path="/special" render={() => <Home 
+                        campsite={this.state.campsites.filter(campsite => campsite.featured)[0]}
+                        promotion={this.state.promotions.filter(promotion => promotion.featured)[0]}
+                        partner={this.state.partners.filter(partner => partner.featured)[0]}/>}/>
+
+                    */}
+
+                    <Route exact path='/directory' render={() => <Directory campsites={ this.state.campsites } />} />                    
                     <Route path='/directory/:campsiteId' component={CampsiteWithId} />
+                    <Route exact path='/aboutus' render={() => <About partners={ this.state.partners } />} />                     
                     <Route exact path='/contactus' component={Contact} /> 
                 </Switch>
                 <Footer />
