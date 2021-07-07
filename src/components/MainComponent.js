@@ -12,7 +12,7 @@ import Contact from './ContactComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import About from './AboutComponent';
-import { addComment } from '../redux/ActionCreators';
+import { addComment, fetchCampsites } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
     return {
@@ -24,16 +24,25 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text))
+    addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text)),
+    fetchCampsites: () => (fetchCampsites())
 };
 
 class Main extends Component {
     
+    componentDidMount() {
+        this.props.fetchCampsites();
+    }
+
     render() {
         const HomePage = () => {
             return (
                 <Home 
-                    campsite={this.props.campsites.filter(campsite => campsite.featured)[0]} 
+                    campsite={this.props.campsites.campsites.filter(campsite => campsite.featured)[0]} 
+                    // above line is now accessing an object named campsites from the CampsitesReducer component that includes an array named 
+                    // campsites, which is why the code this.props.campsites.campsites is necessary
+                    campsitesLoading={this.props.campsites.isLoading}
+                    campsitesErrMess={this.props.campsites.errMess}
                     promotion={this.props.promotions.filter(promotion => promotion.featured)[0]} 
                     partner={this.props.partners.filter(partner => partner.featured)[0]} 
                 />
@@ -44,7 +53,11 @@ class Main extends Component {
             return (
                 <CampsiteInfo 
                     // The + symbol converts a number stored as a string to a number
-                    campsite={this.props.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]}
+                    campsite={this.props.campsites.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]}
+                    // above line is now accessing an object named campsites from the CampsitesReducer component that includes an array named 
+                    // campsites, which is why the code this.props.campsites.campsites is necessary
+                    isLoading={this.props.campsites.isLoading}
+                    errMess={this.props.campsites.errMess}
                     comments={this.props.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)}
                     addComment={this.props.addComment}
                 />

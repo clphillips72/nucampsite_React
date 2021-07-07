@@ -1,4 +1,6 @@
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunk                            from 'redux-thunk';
+import logger                           from 'redux-logger';
 import { CampsitesReducer }             from './campsitesReducer';
 import { CommentsReducer }              from './commentsReducer';
 import { PartnersReducer }              from './partnersReducer';
@@ -11,7 +13,8 @@ export const ConfigureStore = () => {
             comments:   CommentsReducer,
             partners:   PartnersReducer,
             promotions: PromotionsReducer  
-        })
+        }),
+        applyMiddleware(thunk, logger)
     );
 
     return store;
