@@ -3,7 +3,7 @@ import { Breadcrumb, BreadcrumbItem,
          Button, Label, Col, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Component } from 'react';
-import { Control, LocalForm, Errors } from 'react-redux-form';
+import { Control, Form, Actions, Errors } from 'react-redux-form';
 
 const required = val => val && val.length
 
@@ -77,6 +77,9 @@ class Contact extends Component {
     handleSubmit(values) {
         console.log('Current state is: ' + JSON.stringify(values));
         alert('Current state is: ' + JSON.stringify(values));
+        this.props.resetFeedbackForm();
+        // resetFeedbackForm() makes sure that when the form is submitted, the form
+        // values are reset to the initial values
     }
 
     render() {
@@ -114,7 +117,9 @@ class Contact extends Component {
                         <hr />
                     </div>
                     <div className="col-md-10">
-                        <LocalForm onSubmit={values => this.handleSubmit(values)}>
+                        <Form model="feedbackForm" onSubmit={values => this.handleSubmit(values)}>
+                            {/* Adding model=feedbackForm in order to connect the form with the state
+                                in the redux store */}
                             <Row className="form-group">
                                 {/* The change above from FormGroup (in version "Intro to Redux") to Row is required because we're no longer 
                                     using the FormGroup Component from react-strap since that only works with the
@@ -261,7 +266,7 @@ class Contact extends Component {
                                     </Button>
                                 </Col>
                             </Row>
-                        </LocalForm>
+                        </Form>
                     </div>
                 </div>
             </div>
