@@ -18,7 +18,13 @@ const required = val => val && val.length
 //     and false if it doesn't.  If it returns false, then it has failed the test and will create an error.
 
 
-const maxLength = len => val => !val || (val.length <= len); 
+const maxLength = len => val => !val                || (val.length <= len); 
+//                               ChristopherLynn         16        <= 15
+//    false                      false                   false
+//                               ChristopherLyn          15        <= 15
+//    false                      false                   true
+//                               empty                   0         <= 15
+//    false                      true                    true
 
 // 1)  That whole maxLength function is wrapping a function inside a function
 // 2)  inner function (val) where it evaluates !val returns true when the max length hasn't been exceeded. 
