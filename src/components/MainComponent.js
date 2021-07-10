@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
 import About from './AboutComponent';
 import { postComment, fetchCampsites, fetchComments, fetchPromotions } from '../redux/ActionCreators';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const mapStateToProps = state => {
     return {
@@ -82,30 +83,19 @@ class Main extends Component {
 
         return (
             <div>
-                <Header />   
-                <Switch> 
-                    {/* use component={} when component doesn't require state/props data, otherwise use render={} 
-                        when you need to pass props/"state data" to the component being routed to.*/}
-                    <Route path='/home' component={HomePage} />
-                    {/* 
-
-                        Another way to code the above call to {HomePage}...
-                    
-                        <Route exact path="/special" render={() => <Home 
-                        campsite={this.props.campsites.filter(campsite => campsite.featured)[0]}
-                        promotion={this.props.promotions.filter(promotion => promotion.featured)[0]}
-                        partner={this.props.partners.filter(partner => partner.featured)[0]}/>}/>
-
-                    */}
-
-                    <Route exact path='/directory' render={() => <Directory campsites={ this.props.campsites } />} />                    
-                    <Route path='/directory/:campsiteId' component={CampsiteWithId} />
-                    <Route exact path='/aboutus' render={() => <About partners={ this.props.partners } />} />                     
-                    <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
-                    {/* <Route exact path='/contactus' component={Contact} />  */}
-                    {/* Changing route to use render attribute since we're passing props to Contact*/}
-                    <Redirect to="/home" />
-                </Switch>
+                <Header />
+                <TransitionGroup>
+                    <CSSTransition key={this.props.location.key} classNames="page" timeout={300}>
+                        <Switch>
+                            <Route path='/home' component={HomePage} />
+                            <Route exact path='/directory' render={() => <Directory campsites={this.props.campsites} />} />
+                            <Route path='/directory/:campsiteId' component={CampsiteWithId} />
+                            <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} /> } />
+                            <Route exact path='/aboutus' render={() => <About partners={this.props.partners} /> } />
+                            <Redirect to='/home' />
+                        </Switch>
+                    </CSSTransition>
+                </TransitionGroup>
                 <Footer />
             </div>
         );
