@@ -1,15 +1,12 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
-export const addComment = (campsiteId, rating, author, text) => ({
-    type: ActionTypes.ADD_COMMENT,
-    payload: {
-        campsiteId: campsiteId,
-        rating: rating,
-        author: author,
-        text: text
-    }
-});
+//In the "Fetch From Server" lesson, we learned how to get data from a server using fetch 
+//simply by providing fetch with a URL.  In the "Fetch Post Comment" lesson, we are 
+//learning how to post data to a server using fetch.  Comments from the user entered on the 
+//CampsiteInfo page will be posted to the C:\Users\ChrisPhillips\Desktop\NucampFolder\json-server\db.json file,
+//and when the page is refreshed any comments added will persist and remain displayed on the screen and not go away like
+//before. 
 
 export const fetchCampsites = () => dispatch => {
 
@@ -91,6 +88,47 @@ export const addComments = comments => ({
     type: ActionTypes.ADD_COMMENTS,
     payload: comments
 });
+
+export const addComment = comment => ({
+    type: ActionTypes.ADD_COMMENT,
+    payload: comment
+});
+
+export const postComment = (campsiteId, rating, author, text) => dispatch => {
+    
+    const newComment = {
+        campsiteId: campsiteId,
+        rating: rating,
+        author: author,
+        text: text
+    };
+    newComment.date = new Date().toISOString();
+
+    return fetch(baseUrl + 'comments', {
+            method: "POST",
+            body: JSON.stringify(newComment),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => { throw error; }
+        )
+        .then(response => response.json())
+        .then(response => dispatch(addComment(response)))
+        .catch(error => {
+            console.log('post comment', error.message);
+            alert('Your comment could not be posted\nError: ' + error.message);
+        });
+};
 
 export const fetchPromotions = () => dispatch => {
     dispatch(promotionsLoading());
